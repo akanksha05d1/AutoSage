@@ -484,10 +484,7 @@ elif page == "Explore":
                             for feature in features:
                                 st.write(f"✅ {feature.strip()}")
                             
-                            # Add to compare button
-                            if st.button("Add to Comparison"):
-                                st.session_state.compare_vehicle_1 = vehicle_name
-                                st.info(f"Added {vehicle_name} to comparison. Go to Compare page to select a second vehicle.")
+                           #
                         except Exception as e:
                             st.error(f"Error fetching details: {str(e)}")
                             st.info("Using fallback data instead.")
