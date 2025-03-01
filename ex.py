@@ -375,29 +375,42 @@ elif page == "AutoSage Bot":
         with st.chat_message(message["role"]):
             st.markdown(message["content"])
 
+def is_vehicle_related(question):
+    vehicle_keywords = [
+        "car", "bike", "motorcycle", "truck", "suv", "sedan", "coupe", "convertible",
+        "horsepower", "engine", "fuel", "mileage", "range", "price", "torque", "transmission",
+        "brakes", "battery", "EV", "electric", "hybrid", "diesel", "petrol", "gasoline", "charging",
+        "maintenance", "service", "repair", "tire", "wheels", "speed", "acceleration"
+    ]
+    
+    question_lower = question.lower()
+    return any(keyword in question_lower for keyword in vehicle_keywords)
+
 # Chat input
     user_query = st.chat_input("Type your question...")
 
     if user_query:
-    # Display user message
-        st.chat_message("user").markdown(user_query)
-        st.session_state.chat_history.append({"role": "user", "content": user_query})
+        if is_vehicle_related(user_query):
+            # Display user message
+            st.chat_message("user").markdown(user_query)
+            st.session_state.chat_history.append({"role": "user", "content": user_query})
 
-    # Get AI response
-        with st.spinner("Thinking..."):
-            try:
-                response = model.generate_content(user_query)
-                ai_reply = response.text.strip() if response.text else "I'm not sure about that."
+        # Get AI response
+            with st.spinner("Thinking..."):
+                try:
+                    response = model.generate_content(user_query)
+                    ai_reply = response.text.strip() if response.text else "I'm not sure about that."
 
-            # Display AI message
-                with st.chat_message("assistant"):
-                    st.markdown(ai_reply)
+                # Display AI message
+                    with st.chat_message("assistant"):
+                        st.markdown(ai_reply)
 
-            # Store in history
-                st.session_state.chat_history.append({"role": "assistant", "content": ai_reply})
-            except Exception as e:
-                 st.error(f"Error: {str(e)}")
-
+                # Store in history
+                    st.session_state.chat_history.append({"role": "assistant", "content": ai_reply})
+                except Exception as e:
+                    st.error(f"Error: {str(e)}")
+        else:
+            st.warning("⚠ AutoSage only answers vehicle-related questions. Please ask about cars, bikes, or other automobiles.")
 
 #explorepage
 elif page == "Explore":
